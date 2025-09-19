@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend-staging
+  namespace: argocd
+spec:
+  project: makeup
+  source:
+    repoURL: https://github.com/rare-beauty/makeup-gitops
+    targetRevision: dev                 # branch Argo should track
+    path: helm-charts/app                # your reusable chart path
+    helm:
+      valueFiles:
+        - values/frontend/staging.yaml   # <-- the values file you already created
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: makeup-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
