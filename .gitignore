@@ -1,0 +1,7 @@
+# at repo root
+echo "* text=auto eol=lf" >> .gitattributes
+echo "*.sh text eol=lf"   >> .gitattributes
+echo "*.yml text eol=lf"  >> .gitattributes
+echo "*.yaml text eol=lf" >> .gitattributes
+echo "*.tpl text eol=lf"  >> .gitattributes
+echo "*.txt text eol=lf"  >> .gitattributes
