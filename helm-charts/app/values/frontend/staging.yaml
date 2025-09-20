@@ -2,12 +2,12 @@ nameOverride: frontend
 
 image:
   repository: stagingacr947.azurecr.io/frontend
-  tag: "75e4f34"
+  tag: "staging"
 
-containerPort: 3000
+containerPort: 80
 service:
   port: 80
-  targetPort: 3000
+  targetPort: 80
 
 replicaCount: 2
 
