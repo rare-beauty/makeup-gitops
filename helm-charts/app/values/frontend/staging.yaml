@@ -2,7 +2,7 @@ nameOverride: frontend
 
 image:
   repository: stagingacr947.azurecr.io/frontend
-  tag: "staging"
+  tag: "2955e3b"
 
 containerPort: 80
 service:
