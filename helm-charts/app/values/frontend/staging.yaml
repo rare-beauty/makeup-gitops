@@ -5,7 +5,7 @@ image:
   tag: "staging"
   pullPolicy: Always
 
-replicaCount: 2
+replicaCount: 3
 
 # nginx serves on 80; Deployment’s containerPort is tied to service.port in the default scaffold
 # liveness/readiness hit "/" on the named port "http"
@@ -38,7 +38,7 @@ ingress:
         return 200 'ok';
         add_header Content-Type text/plain;
       }
-      
+
   hosts:
     - host: frontend-staging.172.185.37.43.sslip.io
       paths:
