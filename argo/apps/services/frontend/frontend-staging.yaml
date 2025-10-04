@@ -7,7 +7,7 @@ spec:
   project: makeup
   source:
     repoURL: https://github.com/rare-beauty/makeup-gitops.git
-    targetRevision: dev                 # branch Argo should track
+    targetRevision: main                 # branch Argo should track
     path: helm-charts/app                # your reusable chart path
     helm:
       valueFiles:

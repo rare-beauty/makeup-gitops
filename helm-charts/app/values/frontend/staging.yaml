@@ -1,24 +1,41 @@
+# ---------- used by Deployment ----------
 nameOverride: frontend
-
 image:
-  repository: stagingacr947.azurecr.io/frontend
-  tag: "2955e3b"
-
-containerPort: 80
-service:
-  port: 80
-  targetPort: 80
+  repository: stagingacr010.azurecr.io/frontend   # your ACR image
+  tag: "staging"
+  pullPolicy: Always
 
 replicaCount: 2
 
+# nginx serves on 80; Deployment’s containerPort is tied to service.port in the default scaffold
+# liveness/readiness hit "/" on the named port "http"
+# livenessProbe:
+#   httpGet: { path: "/", port: http }
+# readinessProbe:
+#   httpGet: { path: "/", port: http }
+
+# land on userpool (AKS)
+nodeSelector:
+  kubernetes.azure.com/agentpool: userpool
+
+#resources:
+#  requests: { cpu: "100m", memory: "128Mi" }
+#  limits:   { cpu: "500m", memory: "512Mi" }
+
+# ---------- used by Service (and Ingress) ----------
+service:
+  type: ClusterIP   # because you have ingress-nginx in front
+  port: 80          # IMPORTANT: matches nginx’s 80 inside the pod
+  # targetPort: 80  # (leave out; the template uses the named port "http")
+
+# ---------- used by Ingress ----------
 ingress:
   enabled: true
   className: nginx
   hosts:
-    - host: frontend-staging.20.253.142.124.sslip.io   # replace with your controller IP
+    - host: frontend-staging.172.185.37.43.sslip.io
       paths:
         - path: /
           pathType: Prefix
 
-podAnnotations:
-  reloader.stakater.com/auto: "true"
+
