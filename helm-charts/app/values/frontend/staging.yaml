@@ -1,0 +1,24 @@
+nameOverride: frontend
+
+image:
+  repository: stagingacr947.azurecr.io/frontend
+  tag: "2955e3b"
+
+containerPort: 80
+service:
+  port: 80
+  targetPort: 80
+
+replicaCount: 2
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: frontend-staging.20.253.142.124.sslip.io   # replace with your controller IP
+      paths:
+        - path: /
+          pathType: Prefix
+
+podAnnotations:
+  reloader.stakater.com/auto: "true"
