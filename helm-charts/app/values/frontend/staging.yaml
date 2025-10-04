@@ -32,6 +32,13 @@ service:
 ingress:
   enabled: true
   className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location = /healthz {
+        return 200 'ok';
+        add_header Content-Type text/plain;
+      }
+      
   hosts:
     - host: frontend-staging.172.185.37.43.sslip.io
       paths:
