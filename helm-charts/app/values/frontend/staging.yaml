@@ -5,7 +5,7 @@ image:
   tag: "staging"
   pullPolicy: Always
 
-replicaCount: 3
+replicaCount: 1
 
 # nginx serves on 80; Deployment’s containerPort is tied to service.port in the default scaffold
 # liveness/readiness hit "/" on the named port "http"
