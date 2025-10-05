@@ -14,6 +14,25 @@ replicaCount: 1
 # readinessProbe:
 #   httpGet: { path: "/", port: http }
 
+# --- PROBES (Deployment consumes these) ---
+livenessProbe:
+  httpGet:
+    path: /            # or /healthz if you added that file in the image
+    port: http         # matches the named port in your template
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /            # or /healthz
+    port: http
+  initialDelaySeconds: 3
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+
 # land on userpool (AKS)
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
@@ -32,12 +51,12 @@ service:
 ingress:
   enabled: true
   className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location = /healthz {
-        return 200 'ok';
-        add_header Content-Type text/plain;
-      }
+  # annotations:
+  #   nginx.ingress.kubernetes.io/server-snippet: |
+  #     location = /healthz {
+  #       return 200 'ok';
+  #       add_header Content-Type text/plain;
+  #     }
 
   hosts:
     - host: frontend-staging.172.185.37.43.sslip.io
