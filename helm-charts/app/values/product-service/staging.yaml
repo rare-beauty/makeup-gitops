@@ -18,7 +18,7 @@ env:
 livenessProbe:
   httpGet:
     path: /            # or /healthz if you added that file in the image
-    port: http         # matches the named port in your template
+    port: 4003          # matches the named port in your template
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 2
@@ -27,7 +27,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /            # or /healthz
-    port: http
+    port: 4003
   initialDelaySeconds: 3
   periodSeconds: 5
   timeoutSeconds: 2
@@ -37,16 +37,12 @@ readinessProbe:
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
 
-#resources:
-#  requests: { cpu: "100m", memory: "128Mi" }
-#  limits:   { cpu: "500m", memory: "512Mi" }
-
 
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP   # because you have ingress-nginx in front
   port: 80          # IMPORTANT: matches nginx’s 80 inside the pod
-  # targetPort: 80  # (leave out; the template uses the named port "http")
+  targetPort: 4003  # map Service to the app's real port
 
 # ---------- used by Ingress ----------
 ingress:
