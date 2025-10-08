@@ -7,18 +7,12 @@ image:
 
 replicaCount: 2
 
-#  tell the container to listen on 4003
-containerPort: 4003
-env:
-  - name: PORT
-    value: "4003"
-
 
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
     path: /            # or /healthz if you added that file in the image
-    port: 4003          # matches the named port in your template
+    port: http          # matches the named port in your template
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 2
@@ -27,7 +21,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /            # or /healthz
-    port: 4003
+    port: http
   initialDelaySeconds: 3
   periodSeconds: 5
   timeoutSeconds: 2
@@ -42,7 +36,7 @@ nodeSelector:
 service:
   type: ClusterIP   # because you have ingress-nginx in front
   port: 80          # IMPORTANT: matches nginx’s 80 inside the pod
-  targetPort: 4003  # map Service to the app's real port
+  # targetPort: 80  # map Service to the template
 
 # ---------- used by Ingress ----------
 ingress:
