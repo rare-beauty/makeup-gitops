@@ -7,6 +7,12 @@ image:
 
 replicaCount: 2
 
+#  tell the container to listen on 4003
+containerPort: 4003
+env:
+  - name: PORT
+    value: "4003"
+
 
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
@@ -34,6 +40,7 @@ nodeSelector:
 #resources:
 #  requests: { cpu: "100m", memory: "128Mi" }
 #  limits:   { cpu: "500m", memory: "512Mi" }
+
 
 # ---------- used by Service (and Ingress) ----------
 service:
