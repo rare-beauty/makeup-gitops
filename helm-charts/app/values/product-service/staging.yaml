@@ -31,6 +31,14 @@ readinessProbe:
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
 
+# --- service account override
+serviceAccount:
+  create: true
+  name: "wi-sa"
+  automount: true
+  annotations:
+    azure.workload.identity/use: "true"
+    azure.workload.identity/client-id: "cd19c406-81db-4d8a-b307-b6cba48fbab4"
 
 # ---------- used by Service (and Ingress) ----------
 service:
