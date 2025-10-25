@@ -1,0 +1,26 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: product-kv-db-conn
+  namespace: makeup-staging         # <- your staging namespace
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "false"
+    clientID: "cd19c406-81db-4d8a-b307-b6cba48fbab4"   # <- your UAMI client ID
+    keyvaultName: "staging-010"               # <- replace
+    tenantId: "6006b17c-8ebf-4b58-b64f-d3db9972a6a7"   # <- your tenant ID
+    objects: |
+      array:
+        - |
+          objectName: "db-connection"                  # <- KV secret name
+          objectType: secret
+          objectVersion: ""                            # latest
+  # (Optional) also mirror into a native K8s Secret
+  secretObjects:
+    - secretName: product-db-conn
+      type: Opaque
+      data:
+        - objectName: "db-connection"
+          key: connectionString

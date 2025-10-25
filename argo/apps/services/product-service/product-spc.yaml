@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: product-service-spc
+  namespace: argocd
+spec:
+  project: makeup
+  source:
+    repoURL: https://github.com/rare-beauty/makeup-gitops
+    targetRevision: main
+    path: app/staging/product-service
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: makeup-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

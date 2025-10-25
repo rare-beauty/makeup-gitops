@@ -64,3 +64,30 @@ ingress:
           pathType: Prefix
 
 
+# Mount Key Vault secret via CSI using your SPC name
+csi:
+  enabled: true
+  secretProviderClass: "product-kv-db-conn"   # <- must match the SPC metadata.name you created
+
+# (Optional) expose as env var from the mirrored K8s Secret
+env:
+  - name: DB_CONNECTION
+    valueFrom:
+      secretKeyRef:
+        name: product-db-conn       # <- must match secretObjects.secretName in your SPC
+        key: connectionString       # <- must match secretObjects.data[].key in your SPC
+
+
+# Mount the Key Vault secret via the CSI driver using your SPC name
+volumeMounts:
+  - name: secrets-store
+    mountPath: /mnt/secrets-store
+    readOnly: true
+
+volumes:
+  - name: secrets-store
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: product-kv-db-conn   # must match your SPC metadata.name
