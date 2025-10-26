@@ -77,6 +77,12 @@ env:
         name: product-db-conn       # <- must match secretObjects.secretName in your SPC
         key: connectionString       # <- must match secretObjects.data[].key in your SPC
 
+   # add the ones your app actually reads (examples):
+  - name: DATABASE_URL            # Prisma/Sequelize/pg accept this
+    valueFrom:
+      secretKeyRef:
+        name: product-db-conn
+        key: connectionString
 
 # Mount the Key Vault secret via the CSI driver using your SPC name
 volumeMounts:
