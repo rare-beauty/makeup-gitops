@@ -1,7 +1,7 @@
 # ---------- used by Deployment ----------
 nameOverride: frontend
 image:
-  repository: stagingacr010.azurecr.io/frontend   # your ACR image
+  repository: stagingacr02.azurecr.io/frontend   # your ACR image
   tag: "staging"
   pullPolicy: Always
 

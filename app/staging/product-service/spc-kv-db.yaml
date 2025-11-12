@@ -8,9 +8,9 @@ spec:
   parameters:
     usePodIdentity: "false"
     useVMManagedIdentity: "false"
-    clientID: "cd19c406-81db-4d8a-b307-b6cba48fbab4"   # <- your UAMI client ID
-    keyvaultName: "staging-010"               # <- replace
-    tenantId: "6006b17c-8ebf-4b58-b64f-d3db9972a6a7"   # <- your tenant ID
+    clientID: "6b73a742-087d-48b4-a0ec-b341d58d598d"   # <- your UAMI client ID
+    keyvaultName: "staging-kv02"               # <- replace
+    tenantId: "82168e20-b2fb-4b5b-92ff-91df15b0de08"   # <- your tenant ID
     objects: |
       array:
         - |
