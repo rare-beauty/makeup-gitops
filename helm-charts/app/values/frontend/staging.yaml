@@ -53,7 +53,7 @@ ingress:
   #     }
 
   hosts:
-    - host: frontend-staging.20.228.102.254.sslip.io
+    - host: frontend-staging.172.185.27.61.sslip.io
       paths:
         - path: /
           pathType: Prefix
