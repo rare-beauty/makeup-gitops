@@ -1,36 +1,30 @@
 # ---------- used by Deployment ----------
 nameOverride: product-service
 image:
-  repository: stagingacr02.azurecr.io/product-service   # your ACR image
-  tag: "staging"
+  repository: stagingacr02.azurecr.io/product-service # your ACR image
+  tag: "0b435d4"
   pullPolicy: Always
-
 replicaCount: 2
-
-
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
-    path: /            # or /healthz if you added that file in the image
-    port: http          # matches the named port in your template
+    path: / # or /healthz if you added that file in the image
+    port: http # matches the named port in your template
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 2
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
-    path: /            # or /healthz
+    path: / # or /healthz
     port: http
   initialDelaySeconds: 3
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
-
 # land on userpool (AKS)
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
-
 # --- service account override
 serviceAccount:
   create: true
@@ -39,13 +33,11 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "6b73a742-087d-48b4-a0ec-b341d58d598d"
-
 # ---------- used by Service (and Ingress) ----------
 service:
-  type: ClusterIP   # because you have ingress-nginx in front
-  port: 80          # IMPORTANT: matches nginx’s 80 inside the pod
+  type: ClusterIP # because you have ingress-nginx in front
+  port: 80 # IMPORTANT: matches nginx’s 80 inside the pod
   # targetPort: 80  # map Service to the template
-
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
@@ -62,38 +54,32 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-
-
 # Mount Key Vault secret via CSI using your SPC name
 csi:
   enabled: true
-  secretProviderClass: "product-kv-db-conn"   # <- must match the SPC metadata.name you created
-
+  secretProviderClass: "product-kv-db-conn" # <- must match the SPC metadata.name you created
 # (Optional) expose as env var from the mirrored K8s Secret
 env:
   - name: DB_CONNECTION
     valueFrom:
       secretKeyRef:
-        name: product-db-conn       # <- must match secretObjects.secretName in your SPC
-        key: connectionString       # <- must match secretObjects.data[].key in your SPC
-
-  #  # add the ones your app actually reads (examples):
-  # - name: DATABASE_URL            # Prisma/Sequelize/pg accept this
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: product-db-conn
-  #       key: connectionString
-
+        name: product-db-conn # <- must match secretObjects.secretName in your SPC
+        key: connectionString # <- must match secretObjects.data[].key in your SPC
+        #  # add the ones your app actually reads (examples):
+        # - name: DATABASE_URL            # Prisma/Sequelize/pg accept this
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: product-db-conn
+        #       key: connectionString
 # Mount the Key Vault secret via the CSI driver using your SPC name
 volumeMounts:
   - name: secrets-store
     mountPath: /mnt/secrets-store
     readOnly: true
-
 volumes:
   - name: secrets-store
     csi:
       driver: secrets-store.csi.k8s.io
       readOnly: true
       volumeAttributes:
-        secretProviderClass: product-kv-db-conn   # must match your SPC metadata.name
+        secretProviderClass: product-kv-db-conn # must match your SPC metadata.name
