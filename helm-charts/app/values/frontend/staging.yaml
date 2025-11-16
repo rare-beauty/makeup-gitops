@@ -53,3 +53,23 @@ ingress:
           # Product Service
         - path: /api/products
           pathType: Prefix
+
+        # Order Service
+        - path: /api/orders
+          pathType: Prefix
+
+        # User Service
+        - path: /api/users
+          pathType: Prefix
+
+        # Reviews Service
+        - path: /api/reviews
+          pathType: Prefix
+
+        # Contact Service
+        - path: /api/contact
+          pathType: Prefix
+
+        # Blog Service
+        - path: /api/blog
+          pathType: Prefix
