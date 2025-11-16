@@ -1,0 +1,25 @@
+# Stand up MongoDB in the cluster (quick Helm)
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm upgrade --install product-db bitnami/mongodb \
+  -n makeup-staging --create-namespace \
+  --set fullnameOverride=product-db \
+  --set auth.enabled=false \
+  --set persistence.enabled=false
+
+  Notes:
+  - for using RBAC module , question- 
+  if we need to create scripts to creates role assignments instead of using RBAC module or no need of scripts if using rbac module in terraform?
+  Ans- Yes, to use RBAC module we still need to create a script to create roles because terraform initially needs a
+  contributor role so that TF can create resources, once created then acr pull/push and key vault and storage account
+  roles can be created via RBAC module.
+
+  Create & push the tag (from the module repo)
+# see existing tags
+git fetch --tags
+git tag -l
+
+# commit all changes, then:
+git tag v2.1.0            # or use an annotated/signed tag:
+# git tag -a v2.1.0 -m "AKS: enable OIDC/WI + outputs"
+
+git push origin v2.1.0

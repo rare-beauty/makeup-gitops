@@ -5,6 +5,7 @@ image:
   tag: "0b435d4"
   pullPolicy: Always
 replicaCount: 2
+
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
@@ -14,6 +15,7 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 2
   failureThreshold: 3
+
 readinessProbe:
   httpGet:
     path: / # or /healthz
@@ -22,9 +24,11 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
+
 # land on userpool (AKS)
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
+
 # --- service account override
 serviceAccount:
   create: true
@@ -33,11 +37,13 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "6b73a742-087d-48b4-a0ec-b341d58d598d"
+
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP # because you have ingress-nginx in front
   port: 80 # IMPORTANT: matches nginx’s 80 inside the pod
   # targetPort: 80  # map Service to the template
+
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
@@ -48,38 +54,32 @@ ingress:
   #       return 200 'ok';
   #       add_header Content-Type text/plain;
   #     }
-
   hosts:
     - host: product-staging.172.185.27.61.sslip.io
       paths:
         - path: /
           pathType: Prefix
-# Mount Key Vault secret via CSI using your SPC name
+
+# --- CSI / Key Vault ---
 csi:
   enabled: true
-  secretProviderClass: "product-kv-db-conn" # <- must match the SPC metadata.name you created
-# (Optional) expose as env var from the mirrored K8s Secret
+  secretProviderClass: "product-mongo-kv-conn"
+
+# App config: non-sensitive env var with FILE PATH (not the secret)
 env:
-  - name: DB_CONNECTION
-    valueFrom:
-      secretKeyRef:
-        name: product-db-conn # <- must match secretObjects.secretName in your SPC
-        key: connectionString # <- must match secretObjects.data[].key in your SPC
-        #  # add the ones your app actually reads (examples):
-        # - name: DATABASE_URL            # Prisma/Sequelize/pg accept this
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: product-db-conn
-        #       key: connectionString
-# Mount the Key Vault secret via the CSI driver using your SPC name
+  - name: MONGO_URI_FILE
+    value: "/mnt/secrets-store/mongo-connection"
+
+# Mount the CSI volume that contains the secret file
 volumeMounts:
   - name: secrets-store
     mountPath: /mnt/secrets-store
     readOnly: true
+
 volumes:
   - name: secrets-store
     csi:
       driver: secrets-store.csi.k8s.io
       readOnly: true
       volumeAttributes:
-        secretProviderClass: product-kv-db-conn # must match your SPC metadata.name
+        secretProviderClass: product-mongo-kv-conn

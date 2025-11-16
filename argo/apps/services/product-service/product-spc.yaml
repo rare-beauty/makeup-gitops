@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/rare-beauty/makeup-gitops
     targetRevision: main
-    path: app/staging/product-service
+    path: app/service-provider-class/staging
     directory:
       recurse: true
   destination:
