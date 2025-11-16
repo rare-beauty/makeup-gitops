@@ -2,7 +2,7 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend # your ACR image
-  tag: "3e9efdd"
+  tag: "cb8dd16"
   pullPolicy: Always
 replicaCount: 2
 
