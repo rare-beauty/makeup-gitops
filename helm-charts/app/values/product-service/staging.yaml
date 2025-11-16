@@ -2,11 +2,9 @@
 nameOverride: product-service
 image:
   repository: stagingacr02.azurecr.io/product-service
-  tag: "0b435d4"
+  tag: "3e9efdd"
   pullPolicy: Always
-
 replicaCount: 2
-
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
@@ -16,7 +14,6 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 2
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /
@@ -25,11 +22,9 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
-
 # land on userpool (AKS)
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
-
 # --- service account override ---
 serviceAccount:
   create: true
@@ -38,18 +33,16 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "6b73a742-087d-48b4-a0ec-b341d58d598d"
-
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP
   port: 80
-
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
   className: nginx
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"   # for larger files to upload
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m" # for larger files to upload
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
   hosts:
@@ -57,23 +50,19 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-
 # --- CSI / Key Vault ---
 csi:
   enabled: true
   secretProviderClass: "product-mongo-kv-conn"
-
 # App config: non-sensitive env var with FILE PATH (not the secret)
 env:
   - name: MONGO_URI_FILE
     value: "/mnt/secrets-store/mongo-connection"
-
 # Mount the CSI volume that contains the secret file
 volumeMounts:
   - name: secrets-store
     mountPath: /mnt/secrets-store
     readOnly: true
-
 volumes:
   - name: secrets-store
     csi:
