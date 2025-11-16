@@ -1,16 +1,17 @@
 # ---------- used by Deployment ----------
 nameOverride: product-service
 image:
-  repository: stagingacr02.azurecr.io/product-service # your ACR image
+  repository: stagingacr02.azurecr.io/product-service
   tag: "0b435d4"
   pullPolicy: Always
+
 replicaCount: 2
 
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
-    path: / # or /healthz if you added that file in the image
-    port: http # matches the named port in your template
+    path: /
+    port: http
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 2
@@ -18,7 +19,7 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    path: / # or /healthz
+    path: /
     port: http
   initialDelaySeconds: 3
   periodSeconds: 5
@@ -29,7 +30,7 @@ readinessProbe:
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
 
-# --- service account override
+# --- service account override ---
 serviceAccount:
   create: true
   name: "wi-sa"
@@ -40,20 +41,15 @@ serviceAccount:
 
 # ---------- used by Service (and Ingress) ----------
 service:
-  type: ClusterIP # because you have ingress-nginx in front
-  port: 80 # IMPORTANT: matches nginx’s 80 inside the pod
-  # targetPort: 80  # map Service to the template
+  type: ClusterIP
+  port: 80
 
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
   className: nginx
-  # annotations:
-  #   nginx.ingress.kubernetes.io/server-snippet: |
-  #     location = /healthz {
-  #       return 200 'ok';
-  #       add_header Content-Type text/plain;
-  #     }
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"     # <---- ⭐ FIX ADDED HERE
   hosts:
     - host: product-staging.172.185.27.61.sslip.io
       paths:
