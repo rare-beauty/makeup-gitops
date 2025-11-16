@@ -2,10 +2,9 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend # your ACR image
-  tag: "cb8dd16"
+  tag: "814759d"
   pullPolicy: Always
 replicaCount: 2
-
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
@@ -23,11 +22,9 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
-
 # land on userpool (AKS)
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
-
 #resources:
 #  requests: { cpu: "100m", memory: "128Mi" }
 #  limits:   { cpu: "500m", memory: "512Mi" }
@@ -53,7 +50,6 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
- 
- # Product Service
+          # Product Service
         - path: /api/products
           pathType: Prefix
