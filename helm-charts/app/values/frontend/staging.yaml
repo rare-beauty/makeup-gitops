@@ -50,26 +50,9 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-          # Product Service
-        - path: /api/products
-          pathType: Prefix
-
-        # Order Service
-        - path: /api/orders
-          pathType: Prefix
-
-        # User Service
-        - path: /api/users
-          pathType: Prefix
-
-        # Reviews Service
-        - path: /api/reviews
-          pathType: Prefix
-
-        # Contact Service
-        - path: /api/contact
-          pathType: Prefix
-
-        # Blog Service
-        - path: /api/blog
-          pathType: Prefix
+          backend:
+            service:
+              name: frontend
+              port:
+                number: 80
+       

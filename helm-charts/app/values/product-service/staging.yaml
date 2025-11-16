@@ -48,8 +48,14 @@ ingress:
   hosts:
     - host: product-staging.172.185.27.61.sslip.io
       paths:
-        - path: /
+        - path: /api/products
           pathType: Prefix
+          backend:
+            service:
+              name: product-service
+              port:
+                number: 80
+
 # --- CSI / Key Vault ---
 csi:
   enabled: true
