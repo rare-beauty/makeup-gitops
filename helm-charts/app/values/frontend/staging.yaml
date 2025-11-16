@@ -2,7 +2,7 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend # your ACR image
-  tag: "814759d"
+  tag: "6ef456f"
   pullPolicy: Always
 replicaCount: 2
 # --- PROBES (Deployment consumes these) ---
@@ -59,4 +59,3 @@ ingress:
               name: frontend
               port:
                 number: 80
-       
