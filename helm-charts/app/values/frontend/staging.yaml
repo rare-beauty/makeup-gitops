@@ -38,6 +38,10 @@ service:
 ingress:
   enabled: true
   className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m" # for larger files to upload
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
   # annotations:
   #   nginx.ingress.kubernetes.io/server-snippet: |
   #     location = /healthz {
