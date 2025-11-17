@@ -50,21 +50,20 @@ ingress:
   #     }
 
   hosts:
-    - host: frontend-staging.172.185.27.61.sslip.io
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: frontend
-              port:
-                number: 80
+  - host: frontend-staging.172.185.27.61.sslip.io
+    paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
 
-     # Product Service
-        - path: /api/products
-          pathType: Prefix
-          backend:
-            service:
-              name: product-service
-              port:
-                number: 80
+      - path: /api/products
+        pathType: Prefix
+        backend:
+          service:
+            name: product-service
+            port:
+              number: 80
