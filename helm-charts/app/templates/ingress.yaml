@@ -8,7 +8,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className | default "nginx" }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}
@@ -19,9 +19,10 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .backend.service.name }}
+                # Uses the service NAME for this Helm release
+                name: {{ include "app.fullname" $ }}
                 port:
-                  number: {{ .backend.service.port.number }}
+                  number: {{ $.Values.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
