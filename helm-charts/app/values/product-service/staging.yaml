@@ -50,11 +50,8 @@ ingress:
       paths:
         - path: /api/products
           pathType: Prefix
-          backend:
-            service:
-              name: product-service
-              port:
-                number: 80
+        - path: /api/products/uploads
+          pathType: Prefix
 # --- CSI / Key Vault ---
 csi:
   enabled: true
