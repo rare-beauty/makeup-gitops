@@ -59,11 +59,3 @@ ingress:
             name: frontend
             port:
               number: 80
-
-      - path: /api/products
-        pathType: Prefix
-        backend:
-          service:
-            name: product-service
-            port:
-              number: 80
