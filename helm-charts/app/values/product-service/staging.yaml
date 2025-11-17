@@ -42,16 +42,33 @@ ingress:
   enabled: true
   className: nginx
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m" # for larger files to upload
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
   hosts:
     - host: product-staging.172.185.27.61.sslip.io
       paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: product-staging-product-service
+              port:
+                number: 80
         - path: /api/products
           pathType: Prefix
+          backend:
+            service:
+              name: product-staging-product-service
+              port:
+                number: 80
         - path: /api/products/uploads
           pathType: Prefix
+          backend:
+            service:
+              name: product-staging-product-service
+              port:
+                number: 80
 # --- CSI / Key Vault ---
 csi:
   enabled: true

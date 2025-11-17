@@ -19,9 +19,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .backend.service.name }}
+                name: {{ .backend.service.name | default (include "app.fullname" $) }}
                 port:
-                  number: {{ .backend.service.port.number }}
+                  number: {{ .backend.service.port.number | default $.Values.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
