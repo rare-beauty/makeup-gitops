@@ -2,10 +2,9 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend
-  tag: "5ca2c73"
+  tag: "8974bc6"
   pullPolicy: Always
 replicaCount: 2
-
 # --- PROBES ---
 livenessProbe:
   httpGet:
@@ -15,7 +14,6 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 2
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /
@@ -24,15 +22,12 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
-
 nodeSelector:
   kubernetes.azure.com/agentpool: userpool
-
 # ---------- Service ----------
 service:
   type: ClusterIP
   port: 80
-
 # ---------- Ingress ----------
 ingress:
   enabled: true
@@ -41,7 +36,6 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-
   hosts:
     - host: frontend-staging.172.185.27.61.sslip.io
       paths:
@@ -50,10 +44,9 @@ ingress:
           pathType: Prefix
           backend:
             service:
-              name: frontend-staging     # IMPORTANT: Argo renames it to this
+              name: frontend-staging # IMPORTANT: Argo renames it to this
               port:
                 number: 80
-
         # Product Service API
         - path: /api/products
           pathType: Prefix
