@@ -63,4 +63,4 @@ ingress:
             service:
               name: contact-staging-contact-service
               port:
-                number: 80
+                number: 4001
