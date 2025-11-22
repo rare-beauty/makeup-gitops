@@ -55,3 +55,12 @@ ingress:
               name: product-staging-product-service
               port:
                 number: 80
+
+        # Contact Service API
+        - path: /api/contact
+          pathType: Prefix
+          backend:
+            service:
+              name: contact-staging-contact-service
+              port:
+                number: 80
