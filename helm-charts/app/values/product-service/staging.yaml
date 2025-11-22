@@ -28,11 +28,12 @@ nodeSelector:
 # --- service account override ---
 serviceAccount:
   create: true
-  name: "wi-sa"
+  name: "products-sa"
   automount: true
   annotations:
     azure.workload.identity/use: "true"
-    azure.workload.identity/client-id: "6b73a742-087d-48b4-a0ec-b341d58d598d"
+    azure.workload.identity/client-id: "f50d4e60-628e-40bf-9093-2d0002599583"
+    
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP
