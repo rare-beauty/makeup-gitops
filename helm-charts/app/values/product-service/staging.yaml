@@ -77,7 +77,7 @@ csi:
 # App config: non-sensitive env var with FILE PATH (not the secret)
 env:
   - name: MONGO_URI_FILE
-    value: "/mnt/secrets-store/mongo-connection"
+    value: "/mnt/secrets-store/product-mongo-connection"
 # Mount the CSI volume that contains the secret file
 volumeMounts:
   - name: secrets-store
