@@ -9,8 +9,8 @@ spec:
   # Allow multiple repos (for add-ons too)
   sourceRepos:
     - https://github.com/rare-beauty/makeup-gitops
-    - https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
-    - https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
+    # - https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+    # - https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
 
   # Allow deploying to any namespace in this cluster
   destinations:
