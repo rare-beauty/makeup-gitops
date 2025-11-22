@@ -1,0 +1,83 @@
+# ---------- used by Deployment ----------
+nameOverride: contact-service
+image:
+  repository: stagingacr02.azurecr.io/contact-blog-service
+  tag: "a383117"
+  pullPolicy: Always
+replicaCount: 2
+# --- PROBES (Deployment consumes these) ---
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 3
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+# land on userpool (AKS)
+nodeSelector:
+  kubernetes.azure.com/agentpool: userpool
+# --- service account override ---
+serviceAccount:
+  create: true
+  name: "contact-sa"
+  automount: true
+  annotations:
+    azure.workload.identity/use: "true"
+    azure.workload.identity/client-id: "5bde8ac1-fb91-436e-95c5-e9747bb39222"
+    
+# ---------- used by Service (and Ingress) ----------
+service:
+  type: ClusterIP
+  port: 80
+# ---------- used by Ingress ----------
+ingress:
+  enabled: true
+  className: nginx
+  
+  hosts:
+    - host: contact-staging.172.185.27.61.sslip.io
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: contact-staging-contact-service
+              port:
+                number: 80
+        - path: /api/contact
+          pathType: Prefix
+          backend:
+            service:
+              name: contact-staging-contact-service
+              port:
+                number: 80
+        
+# --- CSI / Key Vault ---
+csi:
+  enabled: true
+  secretProviderClass: "contact-mongo-kv-conn"
+# App config: non-sensitive env var with FILE PATH (not the secret)
+env:
+  - name: MONGO_URI_FILE
+    value: "/mnt/secrets-store/contact-mongo-connection"
+# Mount the CSI volume that contains the secret file
+volumeMounts:
+  - name: secrets-store
+    mountPath: /mnt/secrets-store
+    readOnly: true
+volumes:
+  - name: secrets-store
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: contact-mongo-kv-conn
