@@ -2,7 +2,7 @@
 nameOverride: contact-service
 image:
   repository: stagingacr02.azurecr.io/contact-blog-service
-  tag: "6897664"
+  tag: "0bff0d2"
   pullPolicy: Always
 replicaCount: 2
 
