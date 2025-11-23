@@ -5,6 +5,9 @@ image:
   tag: "a383117"
   pullPolicy: Always
 replicaCount: 2
+
+containerPort: 4001
+
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
