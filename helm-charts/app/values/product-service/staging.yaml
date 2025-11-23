@@ -2,7 +2,7 @@
 nameOverride: product-service
 image:
   repository: stagingacr02.azurecr.io/product-service
-  tag: "a383117"
+  tag: "afbd5ce"
   pullPolicy: Always
 replicaCount: 2
 # --- PROBES (Deployment consumes these) ---
@@ -33,7 +33,6 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "f50d4e60-628e-40bf-9093-2d0002599583"
-    
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP

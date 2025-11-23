@@ -2,7 +2,7 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend
-  tag: "a383117"
+  tag: "afbd5ce"
   pullPolicy: Always
 replicaCount: 2
 # --- PROBES ---
@@ -55,7 +55,6 @@ ingress:
               name: product-staging-product-service
               port:
                 number: 80
-
         # Contact Service API
         - path: /api/contact
           pathType: Prefix
