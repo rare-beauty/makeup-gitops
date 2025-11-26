@@ -1,0 +1,91 @@
+# ---------- used by Deployment ----------
+nameOverride: user-service
+image:
+  repository: stagingacr02.azurecr.io/user-service
+  tag: "d8f469d"
+  pullPolicy: Always
+replicaCount: 2
+# --- PROBES (Deployment consumes these) ---
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 3
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+# land on userpool (AKS)
+nodeSelector:
+  kubernetes.azure.com/agentpool: userpool
+# --- service account override ---
+serviceAccount:
+  create: true
+  name: "users-sa"
+  automount: true
+  annotations:
+    azure.workload.identity/use: "true"
+    azure.workload.identity/client-id: "1acb2845-7afa-424f-b496-0e57caf2c6d7"
+# ---------- used by Service (and Ingress) ----------
+service:
+  type: ClusterIP
+  port: 80
+# ---------- used by Ingress ----------
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  hosts:
+    - host: user-staging.172.185.27.61.sslip.io
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: user-staging-user-service
+              port:
+                number: 80
+        - path: /api/users
+          pathType: Prefix
+          backend:
+            service:
+              name: user-staging-user-service
+              port:
+                number: 80
+        - path: /api/users/uploads
+          pathType: Prefix
+          backend:
+            service:
+              name: user-staging-user-service
+              port:
+                number: 80
+# --- CSI / Key Vault ---
+csi:
+  enabled: true
+  secretProviderClass: "user-mongo-kv-conn"
+# App config: non-sensitive env var with FILE PATH (not the secret)
+env:
+  - name: MONGO_URI_FILE
+    value: "/mnt/secrets-store/user-mongo-connection"
+# Mount the CSI volume that contains the secret file
+volumeMounts:
+  - name: secrets-store
+    mountPath: /mnt/secrets-store
+    readOnly: true
+volumes:
+  - name: secrets-store
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: user-mongo-kv-conn

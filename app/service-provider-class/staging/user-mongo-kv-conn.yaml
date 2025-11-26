@@ -1,0 +1,26 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: user-mongo-kv-conn
+  namespace: makeup-staging         # <- your staging namespace
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "false"
+    clientID: "1acb2845-7afa-424f-b496-0e57caf2c6d7"   # <- your UAMI client ID
+    keyvaultName: "staging-kv02"               # <- replace
+    tenantId: "82168e20-b2fb-4b5b-92ff-91df15b0de08"   # <- your tenant ID
+    objects: |
+      array:
+        - |
+          objectName: "users-mongo-connection"                  # <- KV secret name
+          objectType: secret
+          objectVersion: ""                            # latest
+  # (Optional) also mirror into a native K8s Secret
+  # secretObjects:
+  #   - secretName: product-db-conn
+  #     type: Opaque
+  #     data:
+  #       - objectName: "db-connection"
+  #         key: connectionString
