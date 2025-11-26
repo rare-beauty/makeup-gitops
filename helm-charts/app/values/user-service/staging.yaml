@@ -5,20 +5,23 @@ image:
   tag: "d8f469d"
   pullPolicy: Always
 replicaCount: 2
+
+containerPort: 4002
+
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
-    path: /
+    path: /healthz
     port: http
-  initialDelaySeconds: 5
+  initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 2
   failureThreshold: 3
 readinessProbe:
   httpGet:
-    path: /
+    path: /healthz
     port: http
-  initialDelaySeconds: 3
+  initialDelaySeconds: 5
   periodSeconds: 5
   timeoutSeconds: 2
   failureThreshold: 3
@@ -33,18 +36,17 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "1acb2845-7afa-424f-b496-0e57caf2c6d7"
+    
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP
-  port: 80
+  port: 4002
+  
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
   className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  
   hosts:
     - host: user-staging.172.185.27.61.sslip.io
       paths:
@@ -54,21 +56,15 @@ ingress:
             service:
               name: user-staging-user-service
               port:
-                number: 80
+                number: 4002
         - path: /api/users
           pathType: Prefix
           backend:
             service:
               name: user-staging-user-service
               port:
-                number: 80
-        - path: /api/users/uploads
-          pathType: Prefix
-          backend:
-            service:
-              name: user-staging-user-service
-              port:
-                number: 80
+                number: 4002
+        
 # --- CSI / Key Vault ---
 csi:
   enabled: true
