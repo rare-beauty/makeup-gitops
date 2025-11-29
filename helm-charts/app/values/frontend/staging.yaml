@@ -63,3 +63,12 @@ ingress:
               name: contact-staging-contact-service
               port:
                 number: 4001
+
+        # Contact Service API
+        - path: /api/users
+          pathType: Prefix
+          backend:
+            service:
+              name: user-staging-user-service
+              port:
+                number: 4002
