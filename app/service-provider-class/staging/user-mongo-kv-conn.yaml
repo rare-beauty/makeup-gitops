@@ -14,7 +14,7 @@ spec:
     objects: |
       array:
         - |
-          objectName: "user-mongo-connection"                  # <- KV secret name
+          objectName: "users-mongo-connection"                  # <- KV secret name
           objectType: secret
           objectVersion: ""                            # latest
   # (Optional) also mirror into a native K8s Secret
