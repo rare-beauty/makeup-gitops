@@ -14,13 +14,7 @@ spec:
     objects: |
       array:
         - |
-          objectName: "users-mongo-connection"                  # <- KV secret name
+          objectName: "contact-mongo-connection"                  # <- KV secret name
           objectType: secret
           objectVersion: ""                            # latest
-  # (Optional) also mirror into a native K8s Secret
-  # secretObjects:
-  #   - secretName: product-db-conn
-  #     type: Opaque
-  #     data:
-  #       - objectName: "db-connection"
-  #         key: connectionString
+ 
