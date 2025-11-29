@@ -2,7 +2,7 @@
 nameOverride: frontend
 image:
   repository: stagingacr02.azurecr.io/frontend
-  tag: "e9ea200"
+  tag: "673cba1"
   pullPolicy: Always
 replicaCount: 2
 # --- PROBES ---
