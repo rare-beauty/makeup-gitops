@@ -2,12 +2,10 @@
 nameOverride: user-service
 image:
   repository: stagingacr02.azurecr.io/user-service
-  tag: "d8f469d"
+  tag: "e9ea200"
   pullPolicy: Always
 replicaCount: 2
-
 containerPort: 4002
-
 # --- PROBES (Deployment consumes these) ---
 livenessProbe:
   httpGet:
@@ -36,17 +34,14 @@ serviceAccount:
   annotations:
     azure.workload.identity/use: "true"
     azure.workload.identity/client-id: "1acb2845-7afa-424f-b496-0e57caf2c6d7"
-    
 # ---------- used by Service (and Ingress) ----------
 service:
   type: ClusterIP
   port: 4002
-  
 # ---------- used by Ingress ----------
 ingress:
   enabled: true
   className: nginx
-  
   hosts:
     - host: user-staging.172.185.27.61.sslip.io
       paths:
@@ -64,7 +59,6 @@ ingress:
               name: user-staging-user-service
               port:
                 number: 4002
-        
 # --- CSI / Key Vault ---
 csi:
   enabled: true

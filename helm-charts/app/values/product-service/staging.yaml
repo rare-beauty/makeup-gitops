@@ -2,7 +2,7 @@
 nameOverride: product-service
 image:
   repository: stagingacr02.azurecr.io/product-service
-  tag: "2921007"
+  tag: "e9ea200"
   pullPolicy: Always
 replicaCount: 2
 # --- PROBES (Deployment consumes these) ---
