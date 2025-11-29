@@ -2,7 +2,7 @@
 nameOverride: user-service
 image:
   repository: stagingacr02.azurecr.io/user-service
-  tag: "0cc9de2"
+  tag: "bbfcbfb"
   pullPolicy: Always
 replicaCount: 2
 containerPort: 4002
