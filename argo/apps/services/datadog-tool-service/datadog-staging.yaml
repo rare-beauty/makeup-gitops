@@ -11,7 +11,7 @@ spec:
     path: helm-charts/addons-tools-repo/datadog 
     helm:
       valueFiles:
-        - https://raw.githubusercontent.com/rare-beauty/makeup-gitops/main/helm-charts/app/values/datadog/datadog-values.yaml
+        - datadog-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
