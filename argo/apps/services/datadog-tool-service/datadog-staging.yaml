@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: datadog-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rare-beauty/makeup-gitops.git
+    targetRevision: main   
+    path: helm-charts/app 
+    helm:
+      valueFiles:
+        - values/datadog/datadog-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: datadog
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
